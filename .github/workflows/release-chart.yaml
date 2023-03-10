@@ -7,6 +7,19 @@ on:
       - 'release-*'
 
 jobs:
+  debug-log:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF: ${{ github.ref }}
+          REF_TYPE: ${{ github.event.ref_type }}
+          REF_EVENT: ${{ github.event.ref }}
+        run: |
+          echo "event name: $EVENT_NAME"
+          echo "ref: $REF"
+          echo "ref type: $REF_TYPE"
+          echo "ref from event: $REF_EVENT"
   chart-release:
     if: ${{ github.event_name == 'push' || (github.event.ref_type == 'branch' && contains(github.ref, 'refs/heads/release-')) }}
     runs-on: ubuntu-latest
