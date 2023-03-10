@@ -34,4 +34,5 @@ jobs:
           branch: release-${{ steps.get_version.outputs.minor }}
 
       - name: Print result from
-        run: echo "Branch was created? ${{ steps.create_branch.outputs.created }}"
+        run: |
+          echo "Branch was created: ${{ steps.create_branch.outputs.created }}"
