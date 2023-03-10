@@ -4,8 +4,13 @@ on:
   push:
     branches:
       - 'release-*'
+    paths:
+      - 'charts/**'
 
 jobs:
   release-chart:
+    permissions:
+      contents: write
+      releases: write
     name: "Release chart for minor version"
     uses: ./.github/workflows/release-chart.yaml
