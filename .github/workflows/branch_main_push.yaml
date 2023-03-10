@@ -39,6 +39,7 @@ jobs:
           echo "Branch was created: ${{ steps.create_branch.outputs.created }}"
 
   release-chart:
+    needs: create-release-branch
     if: ${{ success() }}
     name: "Release chart for minor version"
     uses: ./.github/workflows/release-chart.yaml
