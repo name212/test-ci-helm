@@ -11,6 +11,6 @@ jobs:
   release-chart:
     permissions:
       contents: write
-      releases: write
+      packages: write
     name: "Release chart for minor version"
     uses: ./.github/workflows/release-chart.yaml
