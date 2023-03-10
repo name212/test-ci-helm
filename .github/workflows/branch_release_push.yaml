@@ -9,8 +9,5 @@ on:
 
 jobs:
   release-chart:
-    permissions:
-      contents: write
-      packages: write
     name: "Release chart for minor version"
     uses: ./.github/workflows/release-chart.yaml
