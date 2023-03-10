@@ -1,4 +1,4 @@
-name: Create release branch
+name: Create release branch and release minor version
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
 
 jobs:
   create-release-branch:
+    name: Create release branch
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -36,3 +37,8 @@ jobs:
       - name: Print result from
         run: |
           echo "Branch was created: ${{ steps.create_branch.outputs.created }}"
+
+  release-chart:
+    if: ${{ success() }}
+    name: "Release chart for minor version"
+    uses: ./.github/workflows/release-chart.yaml
