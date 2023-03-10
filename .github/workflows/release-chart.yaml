@@ -1,12 +1,14 @@
 name: Release helm chart
 
 on:
+  create: {}
   push:
     branches:
       - 'release-*'
 
 jobs:
   chart-release:
+    if: ${{ github.event_name == 'push' || (github.event.ref_type == 'branch' && contains(github.ref, 'refs/heads/release-')) }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
