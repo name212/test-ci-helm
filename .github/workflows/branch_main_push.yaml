@@ -39,6 +39,9 @@ jobs:
           echo "Branch was created: ${{ steps.create_branch.outputs.created }}"
 
   release-chart:
+    permissions:
+      contents: write
+      packages: write
     needs: create-release-branch
     if: ${{ success() }}
     name: "Release chart for minor version"
