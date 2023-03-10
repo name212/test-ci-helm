@@ -1,0 +1,49 @@
+name: Create release branch
+
+on:
+  push:
+    branches:
+      - 'release-*'
+
+jobs:
+  chart-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          version: v3.7.1
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.3.0
+        with:
+          charts_dir: charts
+          config: charts/cr.yaml
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
+      - name: Get chart versions
+        id: get_version
+        run: |
+          version="$(grep 'version:' "$(pwd)/charts/helm_lib/Chart.yaml" | awk -F ': ' '{print $2}')"
+          echo "full=$version" >> $GITHUB_OUTPUT
+
+      - uses: rickstaa/action-create-tag@v1
+        id: tag_create
+        if: ${{ success() }}
+        with:
+          tag: v${{ steps.get_version.outputs.version }}
+
+      - if: ${{ success() }}
+        run: |
+          echo "Tag already present: ${{ steps.tag_create.outputs.tag_exists }}"
