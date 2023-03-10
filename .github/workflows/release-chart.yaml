@@ -1,27 +1,10 @@
 name: Release helm chart
 
 on:
-  create: {}
-  push:
-    branches:
-      - 'release-*'
+  workflow_call: {}
 
 jobs:
-  debug-log:
-    runs-on: ubuntu-latest
-    steps:
-      - env:
-          EVENT_NAME: ${{ github.event_name }}
-          REF: ${{ github.ref }}
-          REF_TYPE: ${{ github.event.ref_type }}
-          REF_EVENT: ${{ github.event.ref }}
-        run: |
-          echo "event name: $EVENT_NAME"
-          echo "ref: $REF"
-          echo "ref type: $REF_TYPE"
-          echo "ref from event: $REF_EVENT"
   chart-release:
-    if: ${{ github.event_name == 'push' || (github.event.ref_type == 'branch' && contains(github.ref, 'refs/heads/release-')) }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -53,12 +36,14 @@ jobs:
           version="$(grep 'version:' "$(pwd)/charts/helm_lib/Chart.yaml" | awk -F ': ' '{print $2}')"
           echo "full=$version" >> $GITHUB_OUTPUT
 
-      - uses: rickstaa/action-create-tag@v1
+      - name: Create tag for release
+        uses: rickstaa/action-create-tag@v1
         id: tag_create
         if: ${{ success() }}
         with:
           tag: v${{ steps.get_version.outputs.full }}
 
-      - if: ${{ success() }}
+      - name: Creation tag result
+        if: ${{ success() }}
         run: |
           echo "Tag already present: ${{ steps.tag_create.outputs.tag_exists }}"

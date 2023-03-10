@@ -1,0 +1,11 @@
+name: Release patch version
+
+on:
+  push:
+    branches:
+      - 'release-*'
+
+jobs:
+  release-chart:
+    name: "Release chart for minor version"
+    uses: ./.github/workflows/release-chart.yaml
