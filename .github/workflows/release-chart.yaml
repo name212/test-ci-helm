@@ -28,7 +28,7 @@ jobs:
 
   chart-release:
     needs: [check_release]
-    if: ${{ !needs.check_release.outputs.exists }}
+    if: ${{ needs.check_release.outputs.exists == 'false' }}
     permissions:
       contents: write
       packages: write
