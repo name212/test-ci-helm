@@ -5,6 +5,7 @@ on:
 
 jobs:
   check_release:
+    runs-on: ubuntu-latest
     outputs:
       exists: ${{ steps.check.outputs.exists }}
     steps:
