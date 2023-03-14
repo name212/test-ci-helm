@@ -27,8 +27,8 @@ jobs:
           tag: nmit_test-${{ steps.get_version.outputs.version }}
 
   chart-release:
-    needs: [check_release_exists]
-    if: ${{ !needs.check_release_exists.outputs.exists }}
+    needs: [check_release]
+    if: ${{ !needs.check_release.outputs.exists }}
     permissions:
       contents: write
       packages: write
