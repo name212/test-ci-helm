@@ -4,11 +4,35 @@ on:
   workflow_call: {}
 
 jobs:
+  check_release:
+    outputs:
+      exists: ${{ steps.check.outputs.exists }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Get chart versions
+        id: get_version
+        run: |
+          version="$(grep 'version:' "$(pwd)/charts/helm_lib/Chart.yaml" | awk -F ': ' '{print $2}')"
+          echo "version=$version" >> $GITHUB_OUTPUT
+
+      - name: Check release exists
+        id: check
+        uses: mukunku/tag-exists-action@v1.2.0
+        with:
+          tag: nmit_test-${{ steps.get_version.outputs.version }}
+
   chart-release:
+    needs: [check_release_exists]
+    if: ${{ !needs.check_release_exists.outputs.exists }}
     permissions:
       contents: write
       packages: write
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -32,21 +56,3 @@ jobs:
           config: charts/cr.yaml
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-
-      - name: Get chart versions
-        id: get_version
-        run: |
-          version="$(grep 'version:' "$(pwd)/charts/helm_lib/Chart.yaml" | awk -F ': ' '{print $2}')"
-          echo "full=$version" >> $GITHUB_OUTPUT
-
-      - name: Create tag for release
-        uses: rickstaa/action-create-tag@v1
-        id: tag_create
-        if: ${{ success() }}
-        with:
-          tag: v${{ steps.get_version.outputs.full }}
-
-      - name: Creation tag result
-        if: ${{ success() }}
-        run: |
-          echo "Tag already present: ${{ steps.tag_create.outputs.tag_exists }}"
