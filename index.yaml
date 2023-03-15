@@ -2,6 +2,15 @@ apiVersion: v1
 entries:
   nmit_test:
   - apiVersion: v2
+    created: "2023-03-15T16:42:09.905861524Z"
+    description: Helm test definitions
+    digest: 76b208b6bfac85e6773e8d6f480f8d231ed213997f702a6baa0658a2376795ab
+    name: nmit_test
+    type: library
+    urls:
+    - https://github.com/name212/test-ci-helm/releases/download/nmit_test-0.6.4/nmit_test-0.6.4.tgz
+    version: 0.6.4
+  - apiVersion: v2
     created: "2023-03-15T16:36:19.787827992Z"
     description: Helm test definitions
     digest: 7a903fcc976fe8ac3fed6e9c9597254b2698b6daea8edc087231c60df5fb329d
@@ -37,4 +46,4 @@ entries:
     urls:
     - https://github.com/name212/test-ci-helm/releases/download/nmit_test-0.6.0/nmit_test-0.6.0.tgz
     version: 0.6.0
-generated: "2023-03-15T16:36:19.787923194Z"
+generated: "2023-03-15T16:42:09.905877624Z"
